@@ -11,9 +11,11 @@ This plugin allows you to perform some common post-processing operations. Featur
 
 ## Using the plugin on gitbook.com
 
-While editing your book, open the *Plugin Store* and look for "PDF Styling".
+The plugin is available from the *Plugin Store* under the name [pdf-styling](https://plugins.gitbook.com/plugin/pdf-styling).
 
-Then, have a look at the "Usage" section below.
+To activate it, while editing your book, open the *Plugin Store* menu and look for "PDF Styling".
+
+Then, have a look at the "Usage" section below for further information on how to use the plugin.
 
 ## Local installation
 
@@ -28,6 +30,8 @@ Or add it to your book's `package.json` and run `gitbook install`.
 All binary dependencies are bundled with the plugin. When using the plugin locally though, you may install custom versions and the plugin will use them if they're available in your PATH:
 
 * [pdftk](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) (note: under most GNU/Linux distributions, usually available as a `pdftk` system package)
+
+Then, have a look at the "Usage" section below for further information on how to use the plugin.
 
 ## How to use it:
 
