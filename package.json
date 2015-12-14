@@ -1,0 +1,25 @@
+{
+  "name": "gitbook-plugin-pdf-styling",
+  "version": "0.0.1",
+  "description": "Post-processing GitBook PDF made easy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chikamichi/gitbook-plugin-pdf-styling.git"
+  },
+  "keywords": [
+    "gitbook",
+    "plugin",
+    "pdf",
+    "post-processing"
+  ],
+  "author": "Jean-Denis Vauguet <jd@vauguet.fr>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chikamichi/gitbook-plugin-pdf-styling/issues"
+  },
+  "homepage": "https://github.com/chikamichi/gitbook-plugin-pdf-styling#readme"
+}
