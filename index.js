@@ -4,15 +4,11 @@ var _ = require('lodash');
 var Q = require('q');
 
 var execAsync = require('./utils/exec_async');
+var stringUtils = require('./utils/string');
 
 var bin = {
   pdftk: __dirname + "/bin/pdftk"
 };
-
-// Escape spaces within string. Useful for paths containing spaces.
-function escapeSpaces(arg) {
-  return arg.replace(/ /g, '\\ ');
-}
 
 function move() {
   var book = this;
@@ -29,7 +25,7 @@ function postprocess() {
     bin.pdftk,
     path.join(book.options.output, 'index.prepost.pdf'),
     'background',
-    path.join(escapeSpaces(book.root), 'images', 'bg.pdf'),
+    path.join(stringUtils.escapeSpaces(book.root), 'images', 'bg.pdf'),
     'output',
     path.join(book.options.output, 'index.pdf')
   ]);
