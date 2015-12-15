@@ -4,32 +4,11 @@ var _ = require('lodash');
 var Q = require('q');
 
 var execAsync = require('./utils/exec_async');
-var stringUtils = require('./utils/string');
 
-var bin = {
-  pdftk: __dirname + "/bin/pdftk"
-};
-
-function move() {
-  var book = this;
-  return execAsync.call(book, [
-    'mv',
-    path.join(book.options.output, 'index.pdf'),
-    path.join(book.options.output, 'index.prepost.pdf')
-  ]);
-}
-
-function postprocess() {
-  var book = this;
-  return execAsync.call(book, [
-    bin.pdftk,
-    path.join(book.options.output, 'index.prepost.pdf'),
-    'background',
-    path.join(stringUtils.escapeSpaces(book.root), 'images', 'bg.pdf'),
-    'output',
-    path.join(book.options.output, 'index.pdf')
-  ]);
-}
+// Required post-processing units.
+var pp = {};
+pp.workflow = require('./lib/post-processing/workflow');
+pp.background = require('./lib/post-processing/background');
 
 module.exports = {
   hooks: {
@@ -40,8 +19,8 @@ module.exports = {
       book.log.info.ln('start post-processing of pdf');
 
       return Q()
-      .then(_.bind(move, book))
-      .then(_.bind(postprocess, book))
+      .then(_.bind(pp.workflow.move2tmp, book))
+      .then(_.bind(pp.background.setImage, book))
       .then(function() {
         book.log.info.ln('completed post-processing of pdf');
       })
