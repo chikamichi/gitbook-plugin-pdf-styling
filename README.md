@@ -1,6 +1,10 @@
 Post-processing GitBook PDF made easy
 =====================================
 
+*Note*: this plugin is currently being developed, but is not ready yet. Come check again in a moment!
+
+---
+
 By default, GitBook generates very simple, black-on-white PDF documents. Although one can achieve some degree of customization through [`styles/pdf.css`](https://help.gitbook.com/styling/book.html) and the use of `book.json` to provide [custom headers and footers](https://help.gitbook.com/format/configuration.html), some operations remain out of reach. For instance, one cannot set a background, although common use-cases for a custom background include watermarking/stamping or even adding a nice color/texture.
 
 This plugin allows you to perform some common post-processing operations. Features:
