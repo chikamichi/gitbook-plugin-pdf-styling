@@ -8,6 +8,8 @@ function execAsync(command) {
   var book = this;
   var d = Q.defer();
 
+  book.log.debug.ln('--> about to execute (async) command ', command.join(' '));
+
   var child = exec(command.join(' '), function (error, stdout) {
     if (error) {
       book.log.info.fail(error);
@@ -17,6 +19,7 @@ function execAsync(command) {
       return d.reject(error);
     }
 
+    book.log.debug.ln('-->  done executing (async) command ', command.join(' '));
     d.resolve();
   });
 

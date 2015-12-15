@@ -4,11 +4,36 @@
   "description": "Post-processing GitBook PDF made easy",
   "main": "index.js",
   "engines": {
-    "gitbook": "*"
+    "gitbook": ">=2.5.0"
   },
   "dependencies": {
     "q": "1.0.1",
     "lodash": "3.10.1"
+  },
+  "gitbook": {
+    "properties": {
+      "background": {
+        "title": "Background",
+        "description": "Set a background, either using an image, a texture, or a hex color code.",
+        "type": "object",
+        "required": false,
+        "oneOf": [
+          { "$ref": "#/definitions/backgroundImage" }
+        ]
+      }
+    },
+    "definitions": {
+      "backgroundImage": {
+        "properties": {
+          "image": {
+            "type": "string",
+            "pattern": "(jpe?g|JPE?G|png|PNG|gif|GIF|bmp|BMP|pdf|PDF)$"
+          }
+        },
+        "required": ["image"],
+        "additionalProperties": false
+      }
+    }
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
