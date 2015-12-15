@@ -1,7 +1,91 @@
 // var fs = require('fs');
 // var path = require('path');
 // var _ = require('lodash');
+var path = require('path');
+var exec = require('child_process').exec;
 var Q = require('q');
+
+var bin = {
+  pdftk: __dirname + "/bin/pdftk"
+};
+
+// Escape spaces within string. Useful for paths containing spaces.
+function escapeSpaces(arg) {
+  return arg.replace(/ /g, '\\ ');
+}
+
+function move() {
+  var book = this;
+  var d = Q.defer();
+
+  var command = [
+    'mv',
+    path.join(book.options.output, 'index.pdf'),
+    path.join(book.options.output, 'index.prepost.pdf')
+  ].join(' ');
+
+  var child = exec(command, function (error, stdout) {
+    if (error) {
+      book.log.info.fail(error);
+
+      error.message = error.message + ' '+stdout;
+
+      return d.reject(error);
+    }
+
+    d.resolve();
+  });
+
+  child.stdout.on('data', function (data) {
+    book.log.debug(data);
+  });
+
+  child.stderr.on('data', function (data) {
+    book.log.debug(data);
+  });
+
+  return d.promise;
+}
+
+function postprocess() {
+  var book = this;
+  var d = Q.defer();
+
+  var command = [
+      bin.pdftk,
+      path.join(book.options.output, 'index.prepost.pdf'),
+      'background',
+      path.join(escapeSpaces(book.root), 'images', 'bg.pdf'),
+      'output',
+      path.join(book.options.output, 'index.pdf')
+  ].join(' ');
+
+  var child = exec(command, function (error, stdout) {
+    if (error) {
+      book.log.info.fail(error);
+
+      if (error.code == 127) {
+        error.message = 'pdftk command was not found, aborting.';
+      } else {
+        error.message = error.message + ' '+stdout;
+      }
+      return d.reject(error);
+    }
+
+    book.log.info.ok();
+    d.resolve();
+  });
+
+  child.stdout.on('data', function (data) {
+      book.log.debug(data);
+  });
+
+  child.stderr.on('data', function (data) {
+      book.log.debug(data);
+  });
+
+  return d.promise;
+}
 
 module.exports = {
   hooks: {
@@ -9,20 +93,16 @@ module.exports = {
       var book = this;
 
       if (book.options.generator != 'pdf') return;
-      book.log.info('start post-processing of pdf');
+      book.log.info.ln('start post-processing of pdf');
 
       return Q()
-
-      // Post-process the PDF rendering for the current book, based on the
-      // supplied configuration.
+      .then(move.bind(book))
+      .then(postprocess.bind(book))
       .then(function() {
-        book.log.warn.ln('TODO: post-processing of pdf');
+        book.log.info.ln('completed post-processing of pdf');
       })
-
-      // Handle errors.
       .fail(function(err) {
-        console.log('Error with pdf-styling: ', err.stack || err.message || err);
-        book.log.fail.ln('Error while running pdf-styling.');
+        console.log('error with pdf-styling: ', err.stack || err.message || err);
         return Q();
       });
     }
