@@ -38,6 +38,8 @@ function preRun(backgroundCfg, foregroundCfg) {
 
 function handleSuccess() {
   this.log.info.ln('completed post-processing of pdf');
+
+  return Q();
 }
 
 // Log error, then abort.
@@ -71,7 +73,7 @@ function init() {
  */
 function readConfiguration() {
   var cfg = this.config.get('pluginsConfig.pdf-styling', {});
-  return [cfg.background, cfg.foreground];
+  return Q([cfg.background, cfg.foreground]);
 }
 
 /**
