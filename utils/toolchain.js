@@ -35,11 +35,47 @@ function preRun(backgroundCfg, foregroundCfg) {
   });
 }
 
+function handleSuccess() {
+  this.log.info.ln('completed post-processing of pdf');
+}
+
+// Log error, then abort.
+function handleError(err) {
+  this.log.warn.ln('aborting post-processing of pdf');
+  this.log.error.ln('error with pdf-styling: ', err.stack || err.message || err);
+
+  // TODO: revert mv operation (implement abortRun and pp.workflow.abort)
+
+  return Q();
+}
+
+/**
+ * Perform initial checks.
+ */
+function init() {
+  var book = this;
+
+  return Q()
+  .then(function() {
+    if (book.options.generator != 'pdf') throw new Error('invalid book format, aborting');
+  })
+  .then(function() {
+    book.log.info.ln('start pdf post-processing');
+  })
+}
+
+/**
+ * Extract relevant conf about background and foreground from book's
+ * configuration.
+ */
 function readConfiguration() {
   var cfg = this.config.get('pluginsConfig.pdf-styling', {});
   return [cfg.background, cfg.foreground];
 }
 
+/**
+ * Trigger background and foreground post-processing units.
+ */
 function runPostProcesses(backgroundCfg, foregroundCfg) {
   var book = this;
 
@@ -51,23 +87,8 @@ function runPostProcesses(backgroundCfg, foregroundCfg) {
   .fail(_.bind(handleError, book));
 }
 
-function handleSuccess() {
-  this.log.info.ln('completed post-processing of pdf');
-}
-
-// Log error, then move on by aborting.
-function handleError(err) {
-  this.log.warn.ln('aborting post-processing of pdf');
-  this.log.error.ln('error with pdf-styling: ', err.stack || err.message || err);
-
-  // TODO: revert mv operation (implement abortRun and pp.workflow.abort)
-
-  return Q();
-}
-
 module.exports = {
+  init: init,
   readConfiguration: readConfiguration,
-  runPostProcesses: runPostProcesses,
-  handleSuccess: handleSuccess,
-  handleError: handleError
+  runPostProcesses: runPostProcesses
 }
