@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: utils/function.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,33 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: utils/function.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * **Collection of utilities related to functions.**
 
+ * @module utils/function
+ */
 
-    <h3> </h3>
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+module.exports = {
+  /**
+   * Check whether an alledgedly callback is actually callable. If not, trumps
+   * it with a no-op function.
+   */
+  ensureCallable: function(callback) {
+    return (typeof callback === 'function') ? callback : function() {};
+  }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
