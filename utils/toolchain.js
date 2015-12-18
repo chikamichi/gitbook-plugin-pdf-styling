@@ -1,5 +1,10 @@
-// Utilities leveraged in several places while processing the book.
-// All of them are bound to the book instance at runtime.
+/**
+ * **Utilities leveraged in several places while processing the book.**
+
+ * All of them are bound to the `book` instance at runtime.
+
+ * @module utils/toolchain
+ */
 
 var fs = require('fs');
 var _ = require('lodash');
