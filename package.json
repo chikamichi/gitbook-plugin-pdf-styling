@@ -7,8 +7,9 @@
     "gitbook": ">=2.5.0"
   },
   "dependencies": {
-    "q": "1.0.1",
-    "lodash": "3.10.1"
+    "lodash": "~>3.10.1",
+    "q": "~>1.0.1",
+    "tmp": "~>0.0.28"
   },
   "gitbook": {
     "properties": {

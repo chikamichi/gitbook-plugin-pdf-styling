@@ -5,9 +5,10 @@ var fs = require('fs');
 var _ = require('lodash');
 var Q = require('q');
 var path = require('path');
-var execAsync = require('./exec_async');
 
-// Required post-processing units.
+var execAsync = require('./exec').async;
+
+// Post-processing units.
 var pp = {};
 pp.workflow = require('../lib/post-processing/workflow');
 pp.background = require('../lib/post-processing/background');
@@ -29,25 +30,28 @@ function preRun(backgroundCfg, foregroundCfg) {
   return Q()
   .then(function() {
     if (backgroundCfg || foregroundCfg) {
-      return pp.workflow.move2tmp.call(book);
+      book.options.pdfStyling = {};
+      return pp.workflow.createTmp.call(book);
     } else {
       throw new Error("Nothing to do, aborting.");
     }
   });
 }
 
-function handleSuccess() {
-  this.log.info.ln('completed post-processing of pdf');
+function postRun() {
+  var book = this;
 
-  return Q();
+  return Q()
+  .then(_.bind(pp.workflow.cleanupTmp, book))
+  .then(function() {
+    book.log.info.ln('completed pdf post-processing');
+  });
 }
 
 // Log error, then abort.
 function handleError(err) {
-  this.log.warn.ln('aborting post-processing of pdf');
   this.log.error.ln('error with pdf-styling: ', err.stack || err.message || err);
-
-  // TODO: revert mv operation (implement abortRun and pp.workflow.abort)
+  this.log.warn.ln('aborting post-processing of pdf');
 
   return Q();
 }
@@ -60,11 +64,12 @@ function init() {
 
   return Q()
   .then(function() {
-    if (book.options.generator != 'pdf') throw new Error('invalid book format, aborting');
+    if (book.options.generator != 'pdf')
+      throw new Error('invalid book format, aborting');
   })
   .then(function() {
     book.log.info.ln('start pdf post-processing');
-  })
+  });
 }
 
 /**
@@ -86,7 +91,7 @@ function runPostProcesses(backgroundCfg, foregroundCfg) {
   .then(_.bind(preRun, book, backgroundCfg, foregroundCfg))
   .then(_.bind(pp.background.run, book, backgroundCfg))
   // TODO: pp.foreground
-  .then(_.bind(handleSuccess, book))
+  .then(_.bind(postRun, book))
   .fail(_.bind(handleError, book));
 }
 

@@ -1,26 +1,26 @@
 var exec = require('child_process').exec;
 var Q = require('q');
+var _ = require('lodash');
 
-// Wrap a command inside a deferrable for later consumption.
-//
-// Expect this to be set to the book being rendered, for context consistency.
-function execAsync(command) {
+/**
+ * Asynchronously execute a command (wraps the command inside a deferrable).
+ */
+function execAsync(command, callback) {
   var book = this;
   var d = Q.defer();
 
-  book.log.debug.ln('--> about to execute (async) command ', command.join(' '));
+  book.log.debug.ln('-->', command.join(' '));
 
   var child = exec(command.join(' '), function (error, stdout) {
     if (error) {
       book.log.info.fail(error);
-
       error.message = error.message + ' '+stdout;
-
       return d.reject(error);
     }
 
-    book.log.debug.ln('-->  done executing (async) command ', command.join(' '));
-    d.resolve();
+    Q.fcall(_.bind(callback || function() {}, book))
+    .then(d.resolve)
+    .fail(d.reject);
   });
 
   child.stdout.on('data', function (data) {
@@ -34,4 +34,6 @@ function execAsync(command) {
   return d.promise;
 }
 
-module.exports = execAsync;
+module.exports = {
+  async: execAsync
+};
