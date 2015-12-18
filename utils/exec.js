@@ -1,6 +1,14 @@
+/**
+ * **Wrapper around `child_process`' execution functions.**.
+ *
+ * @module utils/exec
+ */
+
 var exec = require('child_process').exec;
 var Q = require('q');
 var _ = require('lodash');
+
+var ensureCallable = require('./function').ensureCallable;
 
 /**
  * Asynchronously execute a command (wraps the command inside a deferrable).
@@ -18,7 +26,7 @@ function execAsync(command, callback) {
       return d.reject(error);
     }
 
-    Q.fcall(_.bind(callback || function() {}, book))
+    Q.fcall(_.bind(ensureCallable(callback), book))
     .then(d.resolve)
     .fail(d.reject);
   });
