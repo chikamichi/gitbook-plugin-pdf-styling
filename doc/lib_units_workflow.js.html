@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/exec.js</title>
+    <title>JSDoc: Source: lib/units/workflow.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/exec.js</h1>
+    <h1 class="page-title">Source: lib/units/workflow.js</h1>
 
     
 
@@ -27,52 +27,62 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * **Wrapper around `child_process`' execution functions.**.
+ * **Provides junctures for the post-processing workflow**. Think hooks and
+ * normalized operations.
  *
- * @module utils/exec
+ * @module post-processing/workflow
  */
 
-var exec = require('child_process').exec;
-var Q = require('q');
-var _ = require('lodash');
+var fs = require('fs');
+var path = require('path');
+var tmp = require('tmp');
 
-var ensureCallable = require('./function').ensureCallable;
+var execAsync = require('../../utils/exec').async;
 
 /**
- * Asynchronously execute a command (wraps the command inside a deferrable).
+ * Create a temporary location to work within and move the pdf to be processed
+ * to that location.
  */
-function execAsync(command, callback) {
+function createTmp() {
   var book = this;
-  var d = Q.defer();
 
-  book.log.debug.ln('-->', command.join(' '));
+  book.log.debug.ln('creating post-processing workspace ....');
 
-  var child = exec(command.join(' '), function (error, stdout) {
-    if (error) {
-      book.log.info.fail(error);
-      error.message = error.message + ' '+stdout;
-      return d.reject(error);
-    }
+  var last = 'index.pdf';
+  book.options.pdfStyling.output = tmp.dirSync({
+    unsafeCleanup: true
+  }).name;
 
-    Q.fcall(_.bind(ensureCallable(callback), book))
-    .then(d.resolve)
-    .fail(d.reject);
+  return execAsync.call(book, [
+    'cp',
+    path.join(book.options.output, 'index.pdf'),
+    path.join(book.options.pdfStyling.output, last)
+  ], function() {
+    book.options.pdfStyling.last = last;
   });
+}
 
-  child.stdout.on('data', function (data) {
-    book.log.debug(data);
-  });
+function cleanupTmp() {
+  var book = this;
 
-  child.stderr.on('data', function (data) {
-    book.log.debug(data);
-  });
+  book.log.debug.ln('cleaning post-processing workspace ....');
+  var filepath = path.join(book.options.pdfStyling.output, book.options.pdfStyling.last);
 
-  return d.promise;
+  // tmp will take care of deleting the directory on process exit. Let's simply
+  // move the post-processed pdf back to its original location.
+  return execAsync.call(book, [
+    'cp -f',
+    path.join(book.options.pdfStyling.output, book.options.pdfStyling.last),
+    path.join(book.options.output, 'index.pdf')
+  ]);
 }
 
 module.exports = {
-  async: execAsync
-};
+  // TODO: it now looks like a wannabe constructor function, make it one then.
+  name: 'workflow',
+  createTmp: createTmp,
+  cleanupTmp: cleanupTmp
+}
 </code></pre>
         </article>
     </section>

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: utils/exec.js</title>
+    <title>JSDoc: Source: lib/units/background.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: utils/exec.js</h1>
+    <h1 class="page-title">Source: lib/units/background.js</h1>
 
     
 
@@ -27,52 +27,68 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/**
- * **Wrapper around `child_process`' execution functions.**.
+ * **Handles background-related post-processing**.
  *
- * @module utils/exec
+ * @module post-processing/background
  */
 
-var exec = require('child_process').exec;
+var fs = require('fs');
+var path = require('path');
 var Q = require('q');
 var _ = require('lodash');
+var tmp = require('tmp');
 
-var ensureCallable = require('./function').ensureCallable;
+var execAsync = require('../../utils/exec').async;
+var stringUtils = require('../../utils/string');
+
+var bin = {
+  pdftk: __dirname + "/../../bin/pdftk"
+};
+
+function setBackground() {
+  var book = this;
+
+  book.log.info('setting the background ....');
+
+  var output = tmp.tmpNameSync({
+    dir: book.options.pdfStyling.output,
+    template: 'index.XXXXXX.pdf'
+  });
+
+  return execAsync.call(book, [
+    bin.pdftk,
+    path.join(book.options.pdfStyling.output, book.options.pdfStyling.last),
+    'background',
+    path.join(stringUtils.escapeSpaces(book.root), 'images', 'bg.pdf'),
+    'output',
+    path.join(book.options.pdfStyling.output, output)
+  ], function() {
+    book.options.pdfStyling.last = output;
+    book.log.info.ok();
+  });
+}
 
 /**
- * Asynchronously execute a command (wraps the command inside a deferrable).
+ * Trigger all background post-processings.
  */
-function execAsync(command, callback) {
+function run(cfg) {
   var book = this;
-  var d = Q.defer();
 
-  book.log.debug.ln('-->', command.join(' '));
+  return Q()
+  .then(function() {
+    if (!cfg) throw new Error('No background post-processing specified.');
 
-  var child = exec(command.join(' '), function (error, stdout) {
-    if (error) {
-      book.log.info.fail(error);
-      error.message = error.message + ' '+stdout;
-      return d.reject(error);
-    }
-
-    Q.fcall(_.bind(ensureCallable(callback), book))
-    .then(d.resolve)
-    .fail(d.reject);
-  });
-
-  child.stdout.on('data', function (data) {
-    book.log.debug(data);
-  });
-
-  child.stderr.on('data', function (data) {
-    book.log.debug(data);
-  });
-
-  return d.promise;
+    // TODO: use `convert` to pre-render the background layer as a PDF before
+    // calling setImages, if provided with a non-PDF asset.
+    return setBackground.call(book);
+  })
 }
 
 module.exports = {
-  async: execAsync
-};
+  // TODO: it now looks like a wannabe constructor function, make it one then.
+  name: 'background',
+  run: run
+}
 </code></pre>
         </article>
     </section>
