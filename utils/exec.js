@@ -28,7 +28,7 @@ function execAsync(command) {
       return d.reject(error);
     }
 
-    d.resolve();
+    d.resolve(stdout.replace(/(\n|\r)+$/, ''));
   });
 
   child.stdout.on('data', function (data) {
