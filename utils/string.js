@@ -5,12 +5,20 @@
  */
 
 /**
- * Escape spaces within string. Useful for paths containing spaces.
+ * Capitalize first letter within a string. Useful for ImageMagick -gravity.
  */
-function escapeSpaces(arg) {
-  return arg.replace(/ /g, '\\ ');
+function capitalizeFirst(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+/**
+ * Escape spaces within a string. Useful for paths containing spaces.
+ */
+function escapeSpaces(str) {
+  return str.replace(/ /g, '\\ ');
 }
 
 module.exports = {
+  capitalizeFirst: capitalizeFirst,
   escapeSpaces: escapeSpaces
 };

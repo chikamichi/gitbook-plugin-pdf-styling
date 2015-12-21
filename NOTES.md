@@ -48,9 +48,13 @@ We can assume 72 dpi with calibre's PDF output.
 
 ### Example: resize image to a4 & fill page
 
-`convert bg.jpg -resize 595x842^ -gravity Center -extent 595x842 bg.pdf` (portrait)
+`convert image.jpg -resize 595x842^ -gravity Center -extent 595x842 bg.pdf` (portrait)
 
 One must compute the dimensions anyway, using `identity`:
 
 * http://unix.stackexchange.com/questions/20026/convert-images-to-pdf-how-to-make-pdf-pages-same-size
 * http://stackoverflow.com/questions/32466048/imagemagick-convert-crop-and-resize
+
+### Example: place image in the top-left corner of an a4 page, with a 10pt offset
+
+`convert image.png -bordercolor white -border 10x10 -bordercolor none -gravity NorthWest -geometry -10-10 -extent 595x842 bg.pdf`
