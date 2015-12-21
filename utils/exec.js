@@ -8,12 +8,14 @@ var exec = require('child_process').exec;
 var Q = require('q');
 var _ = require('lodash');
 
-var ensureCallable = require('./function').ensureCallable;
+
+
+/*** Public API ***/
 
 /**
  * Asynchronously execute a command (wraps the command inside a deferrable).
  */
-function execAsync(command, callback) {
+function execAsync(command) {
   var book = this;
   var d = Q.defer();
 
@@ -26,9 +28,7 @@ function execAsync(command, callback) {
       return d.reject(error);
     }
 
-    Q.fcall(_.bind(ensureCallable(callback), book))
-    .then(d.resolve)
-    .fail(d.reject);
+    d.resolve();
   });
 
   child.stdout.on('data', function (data) {
