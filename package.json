@@ -1,6 +1,6 @@
 {
   "name": "gitbook-plugin-pdf-styling",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Post-processing GitBook PDF made easy",
   "main": "index.js",
   "engines": {
