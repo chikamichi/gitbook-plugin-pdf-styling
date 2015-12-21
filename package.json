@@ -24,6 +24,9 @@
           },
           "position": {
             "$ref": "#/definitions/backgroundPosition"
+          },
+          "fill": {
+            "$ref": "#/definitions/backgroundFill"
           }
         }
       }
@@ -38,6 +41,10 @@
         "type": "string",
         "default": "Center",
         "pattern": "^((center)|(((n|N)orth|(s|S)outh){0,1}((e|E)ast|(w|W)est){0,1})){1}$"
+      },
+      "backgroundFill": {
+        "type": "boolean",
+        "default": false
       }
     }
   },
