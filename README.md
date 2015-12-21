@@ -1,17 +1,14 @@
 Post-processing GitBook PDF made easy
 =====================================
 
-*Note*: this plugin is currently being developed, but is not ready yet. Come check again in a moment!
-
----
-
 By default, GitBook generates very simple, black-on-white PDF documents. Although one can achieve some degree of customization through [`styles/pdf.css`](https://help.gitbook.com/styling/book.html) and the use of `book.json` to provide [custom headers and footers](https://help.gitbook.com/format/configuration.html), some operations remain out of reach. For instance, one cannot set a background, although common use-cases for a custom background include watermarking/stamping or even adding a nice color/texture.
 
 This plugin allows you to perform some common post-processing operations. Features:
 
-- [ ] background or foreground watermarking (soon)
-- [ ] colorful background (soon)
-- [ ] texture-based background (soon)
+* [x] **image as background** (fill-page mode supported)
+* [ ] *colorful background (soon)*
+* [ ] *texture-based background (soon)*
+* [ ] *foreground stamping (soon)*
 
 ## Using the plugin on gitbook.com
 
@@ -29,51 +26,70 @@ Either install the plugin manually:
 $ npm install gitbook-plugin-pdf-styling
 ```
 
-Or add it to your book's `package.json` and run `gitbook install`.
+Or add it to the `plugins` list in your `book.json`, then run `gitbook install`.
 
-All binary dependencies are bundled with the plugin. When using the plugin locally though, you may install custom versions and the plugin will use them if they're available in your PATH:
+Some binary dependencies are bundled with the plugin:
 
-* [pdftk](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/) (note: under most GNU/Linux distributions, usually available as a `pdftk` system package)
+* [`pdftk`](https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/)
+
+You will need to have [`imagemagick`](http://www.imagemagick.org/script/index.php) installed locally, though.
 
 Then, have a look at the "Usage" section below for further information on how to use the plugin.
 
-## How to use it:
+## Configuration
 
 In your **book.json**:
 
-```
+``` json
 {
-    "plugins": ["pdf-styling"],
-    "pluginsConfig": {
-        "pdf-styling": {
-            // Configuration for pdf-styling (see below)
-        }
+  "plugins": ["pdf-styling"],
+  "pluginsConfig": {
+    "pdf-styling": {
     }
-}
-```
-
-## Configuration
-
-Configuration for **pdf-styling**:
-
-```js
-{
-    // One can use only one of those three background options at once.
-    "background": {
-        "color": "#E2E2E2",
-        "image": "path/to/your/image.ext",
-        "texture": "path/to/your/texture.ext"
-    },
-    // One can use only one of those two foreground options at once.
-    "foreground": {
-        "image": "path/to/your/image.ext",
-        "texture": "path/to/your/texture.ext"
-    }
+  }
 }
 ```
 
 ## Usage
 
-### Setting a background
+Simply append the configuration you need within the empty `pdf-styling` property.
 
-Soon…
+### Using an image as background
+
+``` json
+"pdf-styling": {
+  "background": {
+    "image": "path/to/image.ext"
+  }
+}
+```
+
+With the "background" mode, you MUST provide an `image` property, with a valid path. The path is relative to your GitBook project.
+
+The image will be centered by default. You can specify the position by providing an aptly named `position` property:
+
+``` json
+"pdf-styling": {
+  "background": {
+    "image": "path/to/image.ext",
+    "position": "northwest"
+  }
+}
+```
+
+Available positions: `center` (default), `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`.
+
+### Using a full-page image as background
+
+You can have your image fill the whole page by setting the `fill` property:
+
+``` json
+"pdf-styling": {
+  "background": {
+    "image": "path/to/image.ext",
+    "fill": true
+  }
+}
+```
+
+Any specified `position` property will be ignored in this mode.
