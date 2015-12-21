@@ -18,21 +18,26 @@
         "description": "Set a background, either using an image, a texture, or a hex color code.",
         "type": "object",
         "required": false,
-        "oneOf": [
-          { "$ref": "#/definitions/backgroundImage" }
-        ]
+        "properties": {
+          "image": {
+            "$ref": "#/definitions/backgroundImage"
+          },
+          "position": {
+            "$ref": "#/definitions/backgroundPosition"
+          }
+        }
       }
     },
     "definitions": {
       "backgroundImage": {
-        "properties": {
-          "image": {
-            "type": "string",
-            "pattern": "(jpe?g|JPE?G|png|PNG|gif|GIF|bmp|BMP|pdf|PDF)$"
-          }
-        },
-        "required": ["image"],
-        "additionalProperties": false
+        "type": "string",
+        "pattern": "(jpe?g|JPE?G|png|PNG|gif|GIF|bmp|BMP|pdf|PDF)$",
+        "required": true
+      },
+      "backgroundPosition": {
+        "type": "string",
+        "default": "Center",
+        "pattern": "^((center)|(((n|N)orth|(s|S)outh){0,1}((e|E)ast|(w|W)est){0,1})){1}$"
       }
     }
   },
