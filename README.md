@@ -1,32 +1,27 @@
-Post-processing GitBook PDF made easy
-=====================================
+# Post-processing your GitBook PDFs made easy
 
-By default, GitBook generates very simple, black-on-white PDF documents. Although one can achieve some degree of customization through [`styles/pdf.css`](https://help.gitbook.com/styling/book.html) and the use of `book.json` to provide [custom headers and footers](https://help.gitbook.com/format/configuration.html), some operations remain out of reach. For instance, one cannot set a background, although common use-cases for a custom background include watermarking/stamping or even adding a nice color/texture.
+By default, GitBook generates very simple, clean, black-on-white PDF documents. Although one can achieve some degree of customization through [`styles/pdf.css`](https://help.gitbook.com/styling/book.html) and the use of `book.json` to provide [custom headers and footers](https://help.gitbook.com/format/configuration.html), some operations remain out of reach. For instance, one cannot set a background or foreground layers, although common use-cases include watermarking/stamping, or even simply adding a nice color/texture to the document.
 
-This plugin allows you to perform some common post-processing operations. Features:
+This plugin allows you to perform some common post-processing operations. It features:
 
-* [x] **image as background** (fill-page mode supported)
-* [ ] *colorful background (soon)*
-* [ ] *texture-based background (soon)*
-* [ ] *foreground stamping (soon)*
+* [x] **setting an image as background** (with fill-page mode supported)
+* [ ] *setting a colorful background (soon)*
+* [ ] *setting a texture-based background (soon)*
+* [ ] *performing foreground stamping (soon)*
 
-## Using the plugin on gitbook.com
+## Using the plugin
+
+### On gitbook.com
 
 The plugin is available from the *Plugin Store* under the name [pdf-styling](https://plugins.gitbook.com/plugin/pdf-styling).
 
-To activate it, while editing your book, open the *Plugin Store* menu and look for "PDF Styling".
+To activate it, while editing your book, open the *Plugin Store* menu and look for "pdf-styling".
 
-Then, have a look at the "Usage" section below for further information on how to use the plugin.
+Do not use the GUI configuration feature from gitbook.com. Have a look at the "Usage" section below instead for further information on how to configure and use the plugin.
 
-## Local installation
+### Local installation
 
-Either install the plugin manually:
-
-```
-$ npm install gitbook-plugin-pdf-styling
-```
-
-Or add it to the `plugins` list in your `book.json`, then run `gitbook install`.
+If you plan on generating PDF documents locally, you should add `pdf-styling` to the `plugins` list in your `book.json`, then run `gitbook install`.
 
 Some binary dependencies are bundled with the plugin:
 
@@ -34,7 +29,7 @@ Some binary dependencies are bundled with the plugin:
 
 You will need to have [`imagemagick`](http://www.imagemagick.org/script/index.php) installed locally, though.
 
-Then, have a look at the "Usage" section below for further information on how to use the plugin.
+Then, have a look at the "Usage" section below for further information on how to configure and use the plugin.
 
 ## Configuration
 
@@ -64,9 +59,9 @@ Simply append the configuration you need within the empty `pdf-styling` property
 }
 ```
 
-With the "background" mode, you MUST provide an `image` property, with a valid path. The path is relative to your GitBook project.
+You must provide a valid path with the `image` property (there is no default value). The path is relative to your GitBook project.
 
-The image will be centered by default. You can specify the position by providing an aptly named `position` property:
+The image will be centered by default. You can specify the position by setting an aptly named `position` property:
 
 ``` json
 "pdf-styling": {
@@ -81,7 +76,7 @@ Available positions: `center` (default), `north`, `northeast`, `east`, `southeas
 
 ### Using a full-page image as background
 
-You can have your image fill the whole page by setting the `fill` property:
+You can have your image filling the whole page by enabling the `fill` property:
 
 ``` json
 "pdf-styling": {
@@ -92,4 +87,4 @@ You can have your image fill the whole page by setting the `fill` property:
 }
 ```
 
-Any specified `position` property will be ignored in this mode.
+Note: any `position` property will be ignored in fill mode.
