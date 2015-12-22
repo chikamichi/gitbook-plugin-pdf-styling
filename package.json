@@ -20,31 +20,20 @@
         "required": false,
         "properties": {
           "image": {
-            "$ref": "#/definitions/backgroundImage"
+            "type": "string",
+            "pattern": "(jpe?g|JPE?G|png|PNG|gif|GIF|bmp|BMP|pdf|PDF)$",
+            "required": true
           },
           "position": {
-            "$ref": "#/definitions/backgroundPosition"
+            "type": "string",
+            "default": "Center",
+            "pattern": "^((center)|(((n|N)orth|(s|S)outh){0,1}((e|E)ast|(w|W)est){0,1})){1}$"
           },
           "fill": {
-            "$ref": "#/definitions/backgroundFill"
+            "type": "boolean",
+            "default": false
           }
         }
-      }
-    },
-    "definitions": {
-      "backgroundImage": {
-        "type": "string",
-        "pattern": "(jpe?g|JPE?G|png|PNG|gif|GIF|bmp|BMP|pdf|PDF)$",
-        "required": true
-      },
-      "backgroundPosition": {
-        "type": "string",
-        "default": "Center",
-        "pattern": "^((center)|(((n|N)orth|(s|S)outh){0,1}((e|E)ast|(w|W)est){0,1})){1}$"
-      },
-      "backgroundFill": {
-        "type": "boolean",
-        "default": false
       }
     }
   },
