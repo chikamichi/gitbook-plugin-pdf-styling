@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: post-processing/background</title>
+    <title>JSDoc: Module: utils/magick</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: post-processing/background</h1>
+    <h1 class="page-title">Module: utils/magick</h1>
 
     
 
@@ -38,7 +38,14 @@
     <div class="container-overview">
     
         
-            <div class="description"><p><strong>This unit handles background-related post-processings.</strong></p></div>
+            <div class="description"><p><strong>Wrapper around gm (ImageMagick) API's selected parts.</strong></p>
+<p><code>gm</code>'s API is two-fold: getters like <code>size</code>, <code>identify</code>… are one-shot calls,
+whereas other functions are chainable calls whose purpose is to build a
+<code>convert</code> command's options sequence; that chain ends up with a call to
+<code>write</code>.</p>
+<p>Both getters and <code>write</code> use the error-first callback style. The goal of this
+wrapper is to provide a promise-compliant API, as well as exposing utility
+functions.</p></div>
         
 
         
@@ -87,12 +94,19 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="lib_units_background.js.html">lib/units/background.js</a>, <a href="lib_units_background.js.html#line1">line 1</a>
+        <a href="utils_magick.js.html">utils/magick.js</a>, <a href="utils_magick.js.html#line1">line 1</a>
     </li></ul></dd>
     
 
     
 
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="https://github.com/aheckmann/gm#methods">https://github.com/aheckmann/gm#methods</a></li>
+        </ul>
+    </dd>
     
 
     
@@ -122,6 +136,13 @@
     
 
     
+        <h3 class="subsection-title">Classes</h3>
+
+        <dl>
+            <dt><a href="module-utils_magick-Magick.html">Magick</a></dt>
+            <dd></dd>
+        </dl>
+    
 
      
 
@@ -129,6 +150,92 @@
 
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="~buildPromiseAPI"><span class="type-signature">(inner) </span>buildPromiseAPI<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Extend a <code>Magick</code> instance with a promise-compliant API.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils_magick.js.html">utils/magick.js</a>, <a href="utils_magick.js.html#line27">line 27</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     
