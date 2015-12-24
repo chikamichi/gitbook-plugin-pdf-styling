@@ -61,6 +61,8 @@ Simply append the configuration you need within the empty `pdf-styling` property
 
 You must provide a valid path with the `image` property (there is no default value). The path is relative to your GitBook project.
 
+#### Position
+
 The image will be centered by default. You can specify the position by setting an aptly named `position` property:
 
 ``` json
@@ -73,6 +75,36 @@ The image will be centered by default. You can specify the position by setting a
 ```
 
 Available positions: `center` (default), `north`, `northeast`, `east`, `southeast`, `south`, `southwest`, `west`, `northwest`.
+
+#### Offsets
+
+Depending on the `position`, you may specify horizontal and/or vertical offsets. For instance, the `northwest` position allows for both directions to be set, whereas the `north` position only allows for the vertical one. The "center" position is not affected by offsets. Think of offsetting as "unsticking from an edge or corner".
+
+You can provide either one or two values:
+
+``` js
+"20x50" // 20pt offset on the horizontal axis, 50pt offset on the vertical axis.
+"10" // 10pt offset on both directions.
+```
+
+``` js
+"0x50" // Fits "north" or "south" positions.
+"50x0" // Fits "west" and "east" positions.
+"10" // Fits any corner position ("northwest", "northeast", etc.)
+"20x70" // Fits any corner position.
+```
+
+An example configuration could then look like this:
+
+``` json
+"pdf-styling": {
+  "background": {
+    "image": "path/to/image.ext",
+    "position": "northwest",
+    "offset": "10x20"
+  }
+}
+```
 
 ### Using a full-page image as background
 
@@ -87,4 +119,4 @@ You can have your image filling the whole page by enabling the `fill` property:
 }
 ```
 
-Note: any `position` property will be ignored in fill mode.
+Note: all specified properties but `image` will be ignored in `fill` mode.
