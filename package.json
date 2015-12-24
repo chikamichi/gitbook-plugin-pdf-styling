@@ -30,6 +30,11 @@
             "default": "Center",
             "pattern": "^((center)|(((n|N)orth|(s|S)outh){0,1}((e|E)ast|(w|W)est){0,1})){1}$"
           },
+          "offset": {
+            "type": "string",
+            "default": "0x0",
+            "pattern": "^\\d+((x|X)\\d+)?$"
+          },
           "fill": {
             "type": "boolean",
             "default": false
