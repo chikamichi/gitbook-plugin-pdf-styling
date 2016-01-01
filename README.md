@@ -5,7 +5,7 @@ By default, GitBook generates very simple, clean, black-on-white PDF documents. 
 This plugin allows you to perform some common post-processing operations. It features:
 
 * [x] **setting an image as background** (with fill-page mode supported)
-* [ ] *setting a colorful background (soon)*
+* [x] **setting a colorful background**
 * [ ] *setting a texture-based background (soon)*
 * [ ] *performing foreground stamping (soon)*
 
