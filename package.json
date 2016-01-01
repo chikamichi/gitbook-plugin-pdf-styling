@@ -36,8 +36,22 @@
             "pattern": "^\\d+((x|X)\\d+)?$"
           },
           "fill": {
-            "type": "boolean",
-            "default": false
+            "oneOf": [
+              {
+                "type": "boolean",
+                "default": false
+              },
+              {
+                "type": "string",
+                "default": "#FFFFFF"
+              }
+            ]
+          },
+          "opacity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1
           }
         }
       }

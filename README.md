@@ -119,4 +119,49 @@ You can have your image filling the whole page by enabling the `fill` property:
 }
 ```
 
-Note: all specified properties but `image` will be ignored in `fill` mode.
+*Note: all specified properties but `image` will be ignored in `fill` mode.*
+
+### Using a color as background
+
+You can use a solid color background by fulfilling `fill` with a color-ish value
+which can be an [hexadecimal color code](https://en.wikipedia.org/wiki/Web_colors#Hex_triplet)
+, or a [X11-compliant color name](http://www.imagemagick.org/script/color.php).
+
+Using an hexadecimal color:
+
+``` json
+"pdf-styling": {
+  "background": {
+    "fill": "#257896"
+  }
+}
+```
+
+Using a X11 name:
+
+``` json
+"pdf-styling": {
+  "background": {
+    "fill": "wheat"
+  }
+}
+```
+
+*Note: when `fill` is set to a color code or name, any specified `image`
+property will be ignored.*
+
+#### Opacity
+
+When using an hexadecimal color code, you may specify the opacity of the color
+(a number between 0 and 1):
+
+``` json
+"pdf-styling": {
+  "background": {
+    "fill": "wheat",
+    "opacity": "0.65"
+  }
+}
+```
+
+*Note: this option is not supported for X11 color names yet".
