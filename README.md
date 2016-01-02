@@ -159,7 +159,7 @@ When using an hexadecimal color code, you may specify the opacity of the color
 "pdf-styling": {
   "background": {
     "fill": "wheat",
-    "opacity": "0.65"
+    "opacity": 0.65
   }
 }
 ```
